@@ -339,6 +339,9 @@ class UIController {
         // Request notification permission immediately
         this.notificationManager.requestPermission();
 
+        // Update routine info
+        this.updateRoutineInfo();
+
         // Check if there's an active session
         if (this.appState.sessionActive) {
             if (this.appState.nextPauseTimestamp) {
@@ -355,8 +358,6 @@ class UIController {
         } else {
             this.showWelcomeScreen();
         }
-
-        this.updateRoutineInfo();
     }
 
     // Handle app resume (check for missed notifications)

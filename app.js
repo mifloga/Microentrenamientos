@@ -1,10 +1,11 @@
-localStorage.removeItem("microTrainingState");
 const content = document.getElementById("content");
 const sound = document.getElementById("alertSound");
 
 const STATE_KEY = "microTrainingState";
 const WEEK_KEY = "weekCounter";
-const PAUSE_INTERVAL = 1 * 60 * 1000; // 1 hour
+const COMPLETED_DAYS_KEY = "completedTrainingDays";
+
+const PAUSE_INTERVAL = 60 * 1000; // 🔁 1 minute for testing
 
 let countdownInterval = null;
 
@@ -76,6 +77,41 @@ const routines = {
 };
 
 /* =========================
+   WEEK + ROUTINE LOGIC
+========================= */
+
+function getWeek() {
+  return Number(localStorage.getItem(WEEK_KEY)) || 1;
+}
+
+function getRoutineForWeek(week) {
+  return week <= 4 ? "A" : "B";
+}
+
+function advanceWeekIfCompleted() {
+  const completed = JSON.parse(localStorage.getItem(COMPLETED_DAYS_KEY)) || [];
+
+  if (completed.length === 4) {
+    let week = getWeek() + 1;
+    if (week > 8) week = 1;
+
+    localStorage.setItem(WEEK_KEY, week);
+    localStorage.removeItem(COMPLETED_DAYS_KEY);
+  }
+}
+
+function markDayCompleted(day) {
+  let completed = JSON.parse(localStorage.getItem(COMPLETED_DAYS_KEY)) || [];
+
+  if (!completed.includes(day)) {
+    completed.push(day);
+    localStorage.setItem(COMPLETED_DAYS_KEY, JSON.stringify(completed));
+  }
+
+  advanceWeekIfCompleted();
+}
+
+/* =========================
    STATE HELPERS
 ========================= */
 
@@ -87,28 +123,26 @@ function loadState() {
   return JSON.parse(localStorage.getItem(STATE_KEY));
 }
 
-function getWeekRoutine() {
-  let week = Number(localStorage.getItem(WEEK_KEY)) || 1;
-  return week <= 4 ? "A" : "B";
-}
-function cancelCountdown() {
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-    countdownInterval = null;
-  }
-  localStorage.removeItem(STATE_KEY);
-  start();
-}
 /* =========================
-   UI FLOW
+   UI
 ========================= */
 
+function routineHeader() {
+  const week = getWeek();
+  const routine = getRoutineForWeek(week);
+  return `<p><strong>Semana ${week} — Rutina ${routine}</strong></p>`;
+}
+
 function start() {
-  content.innerHTML = `<button onclick="selectDay()">Iniciar rutina</button>`;
+  content.innerHTML = `
+    ${routineHeader()}
+    <button onclick="selectDay()">Iniciar rutina</button>
+  `;
 }
 
 function selectDay() {
   content.innerHTML = `
+    ${routineHeader()}
     <div class="card">
       <p>¿Qué día de entrenamiento quieres hacer hoy?</p>
       ${["Lunes","Martes","Jueves","Viernes"]
@@ -119,12 +153,16 @@ function selectDay() {
 }
 
 function startDay(day) {
+  const week = getWeek();
+  const routine = getRoutineForWeek(week);
+
   const state = {
     day,
-    routine: getWeekRoutine(),
+    routine,
     pause: 0,
     nextPauseAt: null
   };
+
   saveState(state);
   showPause(state);
 }
@@ -136,7 +174,12 @@ function showPause(state) {
   }
 
   if (state.pause >= 5) {
-    content.innerHTML = `<p>Día completado.</p>`;
+    markDayCompleted(state.day);
+    content.innerHTML = `
+      ${routineHeader()}
+      <p>Día completado.</p>
+      <button onclick="start()">Volver al inicio</button>
+    `;
     localStorage.removeItem(STATE_KEY);
     return;
   }
@@ -144,6 +187,7 @@ function showPause(state) {
   const data = routines[state.routine][state.day][state.pause];
 
   content.innerHTML = `
+    ${routineHeader()}
     <div class="card">
       <h3>Pausa ${state.pause + 1} – ${data[0]}</h3>
       <p>${data[1]}</p>
@@ -174,18 +218,23 @@ function showCountdown(state) {
     const minutes = Math.floor(remaining / 60000);
     const seconds = Math.floor((remaining % 60000) / 1000);
 
- content.innerHTML = `
-  <div class="card">
-    <h3>Descanso en curso</h3>
-    <p>Siguiente pausa en:</p>
-    <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
-    <button onclick="cancelCountdown()">Cancelar rutina</button>
-  </div>
-`;
+    content.innerHTML = `
+      ${routineHeader()}
+      <div class="card">
+        <h3>Descanso en curso</h3>
+        <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
+        <button onclick="resetAll()">Cancelar rutina</button>
+      </div>
+    `;
   }
 
   tick();
   countdownInterval = setInterval(tick, 1000);
+}
+
+function resetAll() {
+  localStorage.removeItem(STATE_KEY);
+  start();
 }
 
 /* =========================
@@ -204,13 +253,8 @@ window.addEventListener("load", () => {
     return;
   }
 
-  if (state.nextPauseAt) {
-    if (Date.now() >= state.nextPauseAt) {
-      sound.play();
-      showPause(state);
-    } else {
-      showCountdown(state);
-    }
+  if (state.nextPauseAt && Date.now() < state.nextPauseAt) {
+    showCountdown(state);
   } else {
     showPause(state);
   }

@@ -185,18 +185,23 @@ function showPause(state) {
   }
 
   const data = routines[state.routine][state.day][state.pause];
+   const typeClass =
+  data[0].toLowerCase().includes("cardio") ? "cardio" :
+  data[0].toLowerCase().includes("fuerza") ? "strength" :
+  "core";
 const typeClass =
   data[0].toLowerCase().includes("cardio") ? "cardio" :
   data[0].toLowerCase().includes("fuerza") ? "strength" :
   "core";
   content.innerHTML = `
-    ${routineHeader()}
-    <div class="card">
-      <h3>Pausa ${state.pause + 1} – ${data[0]}</h3>
-      <p>${data[1]}</p>
-      <button onclick="completePause()">He terminado</button>
-    </div>
-  `;
+  ${routineHeader()}
+  <div class="card">
+    <span class="tag ${typeClass}">${data[0]}</span>
+    <h3>Pausa ${state.pause + 1}</h3>
+    <p>${data[1]}</p>
+    <button onclick="completePause()">He terminado</button>
+  </div>
+`;
 }
 
 function completePause() {

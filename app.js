@@ -92,7 +92,7 @@ function getWeekRoutine() {
 }
 
 /* =========================
-   UI FLOWS
+   UI FLOW
 ========================= */
 
 function start() {
@@ -114,3 +114,96 @@ function startDay(day) {
   const state = {
     day,
     routine: getWeekRoutine(),
+    pause: 0,
+    nextPauseAt: null
+  };
+  saveState(state);
+  showPause(state);
+}
+
+function showPause(state) {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+
+  if (state.pause >= 5) {
+    content.innerHTML = `<p>Día completado.</p>`;
+    localStorage.removeItem(STATE_KEY);
+    return;
+  }
+
+  const data = routines[state.routine][state.day][state.pause];
+
+  content.innerHTML = `
+    <div class="card">
+      <h3>Pausa ${state.pause + 1} – ${data[0]}</h3>
+      <p>${data[1]}</p>
+      <button onclick="completePause()">He terminado</button>
+    </div>
+  `;
+}
+
+function completePause() {
+  const state = loadState();
+  state.pause++;
+  state.nextPauseAt = Date.now() + PAUSE_INTERVAL;
+  saveState(state);
+  showCountdown(state);
+}
+
+function showCountdown(state) {
+  function tick() {
+    const remaining = state.nextPauseAt - Date.now();
+
+    if (remaining <= 0) {
+      clearInterval(countdownInterval);
+      sound.play();
+      showPause(state);
+      return;
+    }
+
+    const minutes = Math.floor(remaining / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+
+    content.innerHTML = `
+      <div class="card">
+        <h3>Descanso en curso</h3>
+        <p>Siguiente pausa en:</p>
+        <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
+        <p>Puedes dejar la app abierta o cerrarla.</p>
+      </div>
+    `;
+  }
+
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+
+/* =========================
+   INIT
+========================= */
+
+window.addEventListener("load", () => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+  }
+
+  const state = loadState();
+
+  if (!state) {
+    start();
+    return;
+  }
+
+  if (state.nextPauseAt) {
+    if (Date.now() >= state.nextPauseAt) {
+      sound.play();
+      showPause(state);
+    } else {
+      showCountdown(state);
+    }
+  } else {
+    showPause(state);
+  }
+});

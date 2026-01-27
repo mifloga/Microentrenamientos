@@ -90,7 +90,14 @@ function getWeekRoutine() {
   let week = Number(localStorage.getItem(WEEK_KEY)) || 1;
   return week <= 4 ? "A" : "B";
 }
-
+function cancelCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  localStorage.removeItem(STATE_KEY);
+  start();
+}
 /* =========================
    UI FLOW
 ========================= */

@@ -1,28 +1,9 @@
 {
-  "name": "Micro-Training Daily",
-  "short_name": "MicroTrain",
-  "description": "Sistema de micro-entrenamiento diario con 5 pausas activas",
-  "start_url": "/index.html",
+  "name": "Micro-Training Diario",
+  "short_name": "Micro-Training",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#FAFAFA",
-  "theme_color": "#2196F3",
-  "orientation": "portrait",
-  "scope": "/",
-  "icons": [
-    {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["health", "fitness", "lifestyle"],
-  "lang": "es-ES",
-  "dir": "ltr"
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": []
 }

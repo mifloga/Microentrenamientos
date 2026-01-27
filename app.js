@@ -9,8 +9,7 @@ const STATE_KEY = "microTrainingState";
 const WEEK_KEY = "weekCounter";
 const COMPLETED_DAYS_KEY = "completedTrainingDays";
 
-/* 🔁 CHANGE TO 60 * 60 * 1000 FOR REAL USE */
-const PAUSE_INTERVAL = 60 * 1000; // 1 minute (testing)
+const PAUSE_INTERVAL = 60 * 60 * 1000; // 1 hour (production)
 
 let countdownInterval = null;
 

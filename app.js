@@ -233,6 +233,11 @@ function showCountdown(state) {
 }
 
 function resetAll() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+
   localStorage.removeItem(STATE_KEY);
   start();
 }

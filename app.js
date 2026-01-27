@@ -130,7 +130,7 @@ function loadState() {
 function routineHeader() {
   const week = getWeek();
   const routine = getRoutineForWeek(week);
-  return `<p><strong>Semana ${week} — Rutina ${routine}</strong></p>`;
+  return `<div class="routine-header">Semana ${week} — Rutina ${routine}</div>`;
 }
 
 function start() {

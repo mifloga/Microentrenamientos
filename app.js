@@ -185,7 +185,10 @@ function showPause(state) {
   }
 
   const data = routines[state.routine][state.day][state.pause];
-
+const typeClass =
+  data[0].toLowerCase().includes("cardio") ? "cardio" :
+  data[0].toLowerCase().includes("fuerza") ? "strength" :
+  "core";
   content.innerHTML = `
     ${routineHeader()}
     <div class="card">
@@ -219,14 +222,14 @@ function showCountdown(state) {
     const seconds = Math.floor((remaining % 60000) / 1000);
 
     content.innerHTML = `
-      ${routineHeader()}
-      <div class="card">
-        <h3>Descanso en curso</h3>
-        <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
-        <button onclick="resetAll()">Cancelar rutina</button>
-      </div>
-    `;
-  }
+ content.innerHTML = `
+  ${routineHeader()}
+  <div class="card countdown">
+    <h3>Descanso en curso</h3>
+    <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
+    <button class="cancel" onclick="resetAll()">Cancelar rutina</button>
+  </div>
+`;
 
   tick();
   countdownInterval = setInterval(tick, 1000);

@@ -3,7 +3,7 @@ const sound = document.getElementById("alertSound");
 
 const STATE_KEY = "microTrainingState";
 const WEEK_KEY = "weekCounter";
-const PAUSE_INTERVAL = 60 * 60 * 1000; // 1 hour
+const PAUSE_INTERVAL = 1 * 60 * 1000; // 1 hour
 
 let countdownInterval = null;
 

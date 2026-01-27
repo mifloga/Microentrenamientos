@@ -173,14 +173,14 @@ function showCountdown(state) {
     const minutes = Math.floor(remaining / 60000);
     const seconds = Math.floor((remaining % 60000) / 1000);
 
-    content.innerHTML = `
-      <div class="card">
-        <h3>Descanso en curso</h3>
-        <p>Siguiente pausa en:</p>
-        <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
-        <p>Puedes dejar la app abierta o cerrarla.</p>
-      </div>
-    `;
+ content.innerHTML = `
+  <div class="card">
+    <h3>Descanso en curso</h3>
+    <p>Siguiente pausa en:</p>
+    <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
+    <button onclick="cancelCountdown()">Cancelar rutina</button>
+  </div>
+`;
   }
 
   tick();

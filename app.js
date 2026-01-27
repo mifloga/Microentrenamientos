@@ -1,3 +1,4 @@
+localStorage.removeItem("microTrainingState");
 const content = document.getElementById("content");
 const sound = document.getElementById("alertSound");
 

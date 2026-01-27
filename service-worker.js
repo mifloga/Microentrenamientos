@@ -1,4 +1,4 @@
-const CACHE = "micro-training-cache-v1";
+const CACHE = "micro-training-cache-v2";
 const FILES = [
   "index.html",
   "styles.css",

@@ -168,7 +168,6 @@ function startDay(day) {
   saveState(state);
   showPause(state);
 }
-
 function showPause(state) {
   if (countdownInterval) {
     clearInterval(countdownInterval);
@@ -205,6 +204,7 @@ function showPause(state) {
     </div>
   `;
 }
+
 
 function completePause() {
   const state = loadState();

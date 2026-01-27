@@ -1,93 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2196F3">
-    <meta name="description" content="Sistema de micro-entrenamiento diario">
-    <title>Micro-Training PWA</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+  <meta charset="UTF-8" />
+  <title>Micro-Training PWA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <h1>💪 Micro-Training</h1>
-            <div id="routine-info" class="routine-info hidden"></div>
-        </header>
+  <main id="app">
+    <h1>Micro-Training Diario</h1>
+    <div id="content"></div>
+  </main>
 
-        <!-- Main Content Area -->
-        <main id="main-content">
-            
-            <!-- Welcome Screen -->
-            <div id="welcome-screen" class="screen active">
-                <div class="welcome-content">
-                    <h2>Sistema de Entrenamiento Diario</h2>
-                    <p>5 pausas activas de 3-5 minutos</p>
-                    <p>Frecuencia alta, volumen bajo</p>
-                    <button id="start-routine-btn" class="btn btn-primary btn-large">
-                        Iniciar Rutina
-                    </button>
-                </div>
-            </div>
+  <audio id="alertSound" src="sound.mp3" preload="auto"></audio>
 
-            <!-- Training Day Selection Screen -->
-            <div id="day-selection-screen" class="screen hidden">
-                <h2>¿Qué día de entrenamiento quieres hacer hoy?</h2>
-                <div class="day-buttons">
-                    <button class="btn btn-day" data-day="Lunes">Lunes</button>
-                    <button class="btn btn-day" data-day="Martes">Martes</button>
-                    <button class="btn btn-day" data-day="Jueves">Jueves</button>
-                    <button class="btn btn-day" data-day="Viernes">Viernes</button>
-                </div>
-            </div>
-
-            <!-- Pause Display Screen -->
-            <div id="pause-screen" class="screen hidden">
-                <div class="pause-header">
-                    <h2 id="pause-title">Pausa 1</h2>
-                    <span id="pause-type" class="pause-type"></span>
-                </div>
-                <div id="exercises-content" class="exercises-content">
-                    <!-- Exercises will be dynamically inserted here -->
-                </div>
-                <button id="complete-pause-btn" class="btn btn-primary btn-large">
-                    He Terminado
-                </button>
-            </div>
-
-            <!-- Waiting Screen -->
-            <div id="waiting-screen" class="screen hidden">
-                <div class="waiting-content">
-                    <h2>⏱️ Próxima pausa en:</h2>
-                    <div id="countdown-display" class="countdown">--:--</div>
-                    <div id="next-pause-info" class="next-pause-info"></div>
-                    <p class="waiting-note">Se te notificará con sonido cuando sea el momento</p>
-                </div>
-            </div>
-
-            <!-- Completion Screen -->
-            <div id="completion-screen" class="screen hidden">
-                <div class="completion-content">
-                    <h2>🎉 ¡Rutina Completada!</h2>
-                    <p id="completion-message"></p>
-                    <button id="finish-btn" class="btn btn-primary btn-large">
-                        Finalizar
-                    </button>
-                </div>
-            </div>
-
-        </main>
-
-        <!-- Footer -->
-        <footer>
-            <button id="reset-btn" class="btn btn-secondary btn-small">Reiniciar App</button>
-            <p class="footer-note">Cierra la app libremente - se recuperará el estado al reabrirla</p>
-        </footer>
-    </div>
-
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

@@ -1,11 +1,16 @@
 const content = document.getElementById("content");
 const sound = document.getElementById("alertSound");
 
+/* =========================
+   CONSTANTS & STORAGE KEYS
+========================= */
+
 const STATE_KEY = "microTrainingState";
 const WEEK_KEY = "weekCounter";
 const COMPLETED_DAYS_KEY = "completedTrainingDays";
 
-const PAUSE_INTERVAL = 60 * 1000; // 🔁 1 minute for testing
+/* 🔁 CHANGE TO 60 * 60 * 1000 FOR REAL USE */
+const PAUSE_INTERVAL = 60 * 1000; // 1 minute (testing)
 
 let countdownInterval = null;
 
@@ -77,7 +82,7 @@ const routines = {
 };
 
 /* =========================
-   WEEK + ROUTINE LOGIC
+   WEEK & ROUTINE LOGIC
 ========================= */
 
 function getWeek() {
@@ -88,27 +93,24 @@ function getRoutineForWeek(week) {
   return week <= 4 ? "A" : "B";
 }
 
-function advanceWeekIfCompleted() {
-  const completed = JSON.parse(localStorage.getItem(COMPLETED_DAYS_KEY)) || [];
+function markDayCompleted(day) {
+  const completed =
+    JSON.parse(localStorage.getItem(COMPLETED_DAYS_KEY)) || [];
+
+  if (!completed.includes(day)) {
+    completed.push(day);
+    localStorage.setItem(
+      COMPLETED_DAYS_KEY,
+      JSON.stringify(completed)
+    );
+  }
 
   if (completed.length === 4) {
     let week = getWeek() + 1;
     if (week > 8) week = 1;
-
     localStorage.setItem(WEEK_KEY, week);
     localStorage.removeItem(COMPLETED_DAYS_KEY);
   }
-}
-
-function markDayCompleted(day) {
-  let completed = JSON.parse(localStorage.getItem(COMPLETED_DAYS_KEY)) || [];
-
-  if (!completed.includes(day)) {
-    completed.push(day);
-    localStorage.setItem(COMPLETED_DAYS_KEY, JSON.stringify(completed));
-  }
-
-  advanceWeekIfCompleted();
 }
 
 /* =========================
@@ -124,7 +126,7 @@ function loadState() {
 }
 
 /* =========================
-   UI
+   UI HELPERS
 ========================= */
 
 function routineHeader() {
@@ -132,6 +134,10 @@ function routineHeader() {
   const routine = getRoutineForWeek(week);
   return `<div class="routine-header">Semana ${week} — Rutina ${routine}</div>`;
 }
+
+/* =========================
+   MAIN UI FLOWS
+========================= */
 
 function start() {
   content.innerHTML = `
@@ -153,16 +159,12 @@ function selectDay() {
 }
 
 function startDay(day) {
-  const week = getWeek();
-  const routine = getRoutineForWeek(week);
-
   const state = {
     day,
-    routine,
+    routine: getRoutineForWeek(getWeek()),
     pause: 0,
     nextPauseAt: null
   };
-
   saveState(state);
   showPause(state);
 }
@@ -175,33 +177,33 @@ function showPause(state) {
 
   if (state.pause >= 5) {
     markDayCompleted(state.day);
+    localStorage.removeItem(STATE_KEY);
     content.innerHTML = `
       ${routineHeader()}
-      <p>Día completado.</p>
-      <button onclick="start()">Volver al inicio</button>
+      <div class="card completed">
+        <h3>Día completado</h3>
+        <button onclick="start()">Volver al inicio</button>
+      </div>
     `;
-    localStorage.removeItem(STATE_KEY);
     return;
   }
 
   const data = routines[state.routine][state.day][state.pause];
-   const typeClass =
-  data[0].toLowerCase().includes("cardio") ? "cardio" :
-  data[0].toLowerCase().includes("fuerza") ? "strength" :
-  "core";
-const typeClass =
-  data[0].toLowerCase().includes("cardio") ? "cardio" :
-  data[0].toLowerCase().includes("fuerza") ? "strength" :
-  "core";
+
+  const typeClass =
+    data[0].toLowerCase().includes("cardio") ? "cardio" :
+    data[0].toLowerCase().includes("fuerza") ? "strength" :
+    "core";
+
   content.innerHTML = `
-  ${routineHeader()}
-  <div class="card">
-    <span class="tag ${typeClass}">${data[0]}</span>
-    <h3>Pausa ${state.pause + 1}</h3>
-    <p>${data[1]}</p>
-    <button onclick="completePause()">He terminado</button>
-  </div>
-`;
+    ${routineHeader()}
+    <div class="card">
+      <span class="tag ${typeClass}">${data[0]}</span>
+      <h3>Pausa ${state.pause + 1}</h3>
+      <p>${data[1]}</p>
+      <button onclick="completePause()">He terminado</button>
+    </div>
+  `;
 }
 
 function completePause() {
@@ -218,6 +220,7 @@ function showCountdown(state) {
 
     if (remaining <= 0) {
       clearInterval(countdownInterval);
+      countdownInterval = null;
       sound.play();
       showPause(state);
       return;
@@ -227,14 +230,14 @@ function showCountdown(state) {
     const seconds = Math.floor((remaining % 60000) / 1000);
 
     content.innerHTML = `
- content.innerHTML = `
-  ${routineHeader()}
-  <div class="card countdown">
-    <h3>Descanso en curso</h3>
-    <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
-    <button class="cancel" onclick="resetAll()">Cancelar rutina</button>
-  </div>
-`;
+      ${routineHeader()}
+      <div class="card countdown">
+        <h3>Descanso en curso</h3>
+        <h2>${minutes}:${seconds.toString().padStart(2, "0")}</h2>
+        <button class="cancel" onclick="resetAll()">Cancelar rutina</button>
+      </div>
+    `;
+  }
 
   tick();
   countdownInterval = setInterval(tick, 1000);
@@ -245,7 +248,6 @@ function resetAll() {
     clearInterval(countdownInterval);
     countdownInterval = null;
   }
-
   localStorage.removeItem(STATE_KEY);
   start();
 }

@@ -1,0 +1,227 @@
+/* =========================
+   DESIGN TOKENS
+========================= */
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #eef2ff, #fdf2f8);
+
+  --card-bg: #ffffff;
+
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+
+  --cardio: #ef4444;
+  --strength: #f97316;
+  --core: #22c55e;
+
+  --countdown: #22c55e;
+  --completed: #16a34a;
+
+  --text-main: #111827;
+  --text-soft: #6b7280;
+
+  --radius-lg: 18px;
+  --radius-md: 12px;
+}
+
+/* =========================
+   RESET
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+main {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 32px 20px 40px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 28px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+/* =========================
+   ROUTINE HEADER
+========================= */
+
+.routine-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+  width: 100%;
+  padding: 14px 16px;
+  margin-top: 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--primary);
+  color: white;
+  transition: transform 0.12s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 14px rgba(99, 102, 241, 0.25);
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 8px rgba(99, 102, 241, 0.25);
+}
+
+button.cancel {
+  background: #ef4444;
+  box-shadow: 0 6px 14px rgba(239, 68, 68, 0.25);
+}
+
+button.cancel:hover {
+  background: #dc2626;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 26px 22px;
+  margin-top: 22px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+  animation: cardIn 0.35s ease;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card h3 {
+  margin: 8px 0 6px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.card p {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* =========================
+   TAGS (EXERCISE TYPES)
+========================= */
+
+.tag {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.tag.cardio {
+  background: var(--cardio);
+}
+
+.tag.strength {
+  background: var(--strength);
+}
+
+.tag.core {
+  background: var(--core);
+}
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+.countdown {
+  background: var(--countdown);
+  color: white;
+}
+
+.countdown h3 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.countdown h2 {
+  font-size: 44px;
+  margin: 18px 0;
+  font-weight: 700;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* =========================
+   COMPLETED STATE
+========================= */
+
+.completed {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.completed h3 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.completed p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media (max-width: 360px) {
+  h1 {
+    font-size: 26px;
+  }
+
+  .countdown h2 {
+    font-size: 38px;
+  }
+}

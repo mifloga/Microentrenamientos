@@ -20,7 +20,7 @@ let countdownInterval = null;
 const routines = {
   A: {
     Lunes: [
-      ["Cardio", "Escaleras completas (4) + Marcha con rodillas altas (30)"],
+      ["Cardio", "Escaleras completas + Marcha con rodillas altas"],
       ["Fuerza brazos", "Remo con ligas en pelota + Face pull"],
       ["Core", "Dead bug + Bird dog"],
       ["Cardio", "Mountain climbers + Skaters sin salto"],
@@ -34,7 +34,7 @@ const routines = {
       ["Fuerza brazos", "Press hombro con ligas y pelota + Elevación lateral lenta"]
     ],
     Jueves: [
-      ["Cardio", "Escaleras completas (4) + Marcha con rodillas altas (30)"],
+      ["Cardio", "Escaleras completas + Marcha con rodillas altas"],
       ["Fuerza brazos", "Press hombro con ligas + Elevación lateral"],
       ["Core", "Press Pallof + ABS oblicuos controlados"],
       ["Cardio", "Step-up + Sentadilla dinámica"],
@@ -44,7 +44,7 @@ const routines = {
       ["Cardio", "Mountain climbers progresivos + Skaters sin salto"],
       ["Fuerza brazos", "Curl bíceps con ligas + Extensión tríceps"],
       ["Core", "Puente de glúteo + Upper thigh"],
-      ["Cardio", "Escaleras completas (4) + Marcha con rodillas altas (30)"],
+      ["Cardio", "Escaleras completas + Marcha con rodillas altas"],
       ["Fuerza brazos", "Chest press con pelota + Push-up inclinado"]
     ]
   },
@@ -64,7 +64,7 @@ const routines = {
       ["Fuerza brazos", "Press hombro alterno con ligas + Elevación frontal alterna"]
     ],
     Jueves: [
-      ["Cardio", "Marcha con rodillas altas (30) + Sentadilla dinámica"],
+      ["Cardio", "Marcha con rodillas altas + Sentadilla dinámica"],
       ["Fuerza brazos", "Remo con ligas + pausa atrás + Face pull"],
       ["Core", "Press Pallof con pausa + ABS oblicuos lentos"],
       ["Cardio", "Skaters sin salto + Step-up"],

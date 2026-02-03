@@ -208,10 +208,20 @@ function showPause(state) {
 function completePause() {
   const state = loadState();
   state.pause++;
+
+  // If Pausa 5 was just completed → finish day
+  if (state.pause >= 5) {
+    saveState(state);
+    showPause(state);
+    return;
+  }
+
+  // Otherwise, schedule next pause
   state.nextPauseAt = Date.now() + PAUSE_INTERVAL;
   saveState(state);
   showCountdown(state);
 }
+
 
 function showCountdown(state) {
   function tick() {

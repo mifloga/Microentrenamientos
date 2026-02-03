@@ -127,6 +127,16 @@ function loadState() {
 /* =========================
    UI HELPERS
 ========================= */
+function notify(title, body) {
+  if (!("Notification" in window)) return;
+
+  if (Notification.permission === "granted") {
+    new Notification(title, {
+      body: body,
+      silent: false
+    });
+  }
+}
 
 function routineHeader() {
   const week = getWeek();
@@ -227,13 +237,27 @@ function showCountdown(state) {
   function tick() {
     const remaining = state.nextPauseAt - Date.now();
 
-    if (remaining <= 0) {
-      clearInterval(countdownInterval);
-      countdownInterval = null;
-      sound.play();
-      showPause(state);
-      return;
-    }
+ if (remaining <= 0) {
+  clearInterval(countdownInterval);
+  countdownInterval = null;
+
+  const nextPause = state.pause + 1;
+  const data = routines[state.routine][state.day][state.pause];
+
+  notify(
+    `Pausa ${nextPause} lista`,
+    `${data[0]}: ${data[1]}`
+  );
+
+  // Optional: try sound (works only if allowed)
+  try {
+    sound.play();
+  } catch (e) {}
+
+  showPause(state);
+  return;
+}
+
 
     const minutes = Math.floor(remaining / 60000);
     const seconds = Math.floor((remaining % 60000) / 1000);
@@ -266,7 +290,11 @@ function resetAll() {
 ========================= */
 
 window.addEventListener("load", () => {
-  if ("serviceWorker" in navigator) {
+  if ("Notification" in window && Notification.permission === "default") {
+  Notification.requestPermission();
+}
+
+   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
   }
 
@@ -277,9 +305,19 @@ window.addEventListener("load", () => {
     return;
   }
 
-  if (state.nextPauseAt && Date.now() < state.nextPauseAt) {
-    showCountdown(state);
-  } else {
-    showPause(state);
-  }
+if (state.nextPauseAt && Date.now() < state.nextPauseAt) {
+  showCountdown(state);
+} else if (state.nextPauseAt && Date.now() >= state.nextPauseAt) {
+  const data = routines[state.routine][state.day][state.pause];
+
+  notify(
+    `Pausa ${state.pause + 1} lista`,
+    `${data[0]}: ${data[1]}`
+  );
+
+  showPause(state);
+} else {
+  start();
+}
+
 });
